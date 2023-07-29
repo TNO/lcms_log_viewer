@@ -1,0 +1,55 @@
+{
+  "name": "hei",
+  "version": "0.2.0",
+  "description": "Web application to display Human Enhancement Interventions Technologies.",
+  "scripts": {
+    "clean": "rimraf ./public ./.parcel-cache ./.cache ./dist ./docs",
+    "cleanup": "npm run clean",
+    "dev": "npx rspack serve",
+    "build": "npx rspack build",
+    "start": "npm run dev",
+    "build:domain": "npm run clean && npm run build",
+    "docker:build": "docker buildx build -t l3crisis .",
+    "docker:tag": "docker tag l3crisis drivereu/l3crisis:nl",
+    "docker:publish": "docker push drivereu/l3crisis:nl",
+    "docker": "npm run docker:local && npm run docker:publish",
+    "docker:local": "npm run docker:build && npm run docker:tag",
+    "docker:run": "docker run --name l3 -it -p 3000:3000 l3crisis",
+    "docker:sh": "docker run -it l3crisis sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TNO/hei.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TNO/hei/issues"
+  },
+  "homepage": "https://github.com/TNO/hei#readme",
+  "author": "Erik Vullings <erik.vullings@tno.nl> (http://www.tno.nl)",
+  "keywords": [
+    "database",
+    "single page application",
+    "SPA",
+    "human enhancement interventions"
+  ],
+  "license": "MIT",
+  "app": "docs/index.html",
+  "target": "web",
+  "dependencies": {
+    "base64-js": "^1.5.1",
+    "material-icons": "^1.13.9",
+    "materialize-css": "^1.0.0",
+    "meiosis-setup": "^6.2.3",
+    "mithril": "^2.2.2",
+    "mithril-materialized": "^1.0.1",
+    "slimdown-js": "^0.7.1",
+    "pdfjs-dist": "3.8.162"
+  },
+  "devDependencies": {
+    "@types/materialize-css": "^1.0.11",
+    "@types/mithril": "^2.0.12",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.6",
+    "@rspack/cli": "0.2.9"
+  }
+}
