@@ -1,6 +1,6 @@
 const path = require('path');
 const devMode = process.env.NODE_ENV === 'development';
-const outputPath = path.resolve(__dirname, devMode ? 'dist' : 'public');
+const outputPath = path.resolve(__dirname, devMode ? 'dist' : 'docs');
 
 console.log(`Working in ${devMode ? 'development' : 'production'} mode.`);
 
@@ -16,7 +16,7 @@ module.exports = {
   builtins: {
     define: {
       'process.env.NODE_ENV': "'development'",
-      API_SERVER: devMode ? "'http://localhost:4000'" : undefined,
+      // API_SERVER: devMode ? "'http://localhost:4000'" : undefined,
     },
     html: [
       {
@@ -63,6 +63,7 @@ module.exports = {
     ],
   },
   output: {
+    publicPath: devMode ? undefined : 'https://tno.github.io/lcms_log_viewer',
     filename: '[name].js',
     path: outputPath,
   },
