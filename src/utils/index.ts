@@ -94,3 +94,17 @@ export const joinListWithAnd = (arr: string[] = [], and = 'and', prefix = '') =>
 export const markdown2html = (markdown = '') => m.trust(render(markdown, true, true));
 
 export const isUnique = <T>(item: T, pos: number, arr: T[]) => arr.indexOf(item) == pos;
+
+/** Generate an array of numbers, from start till end, with optional step size. */
+export const generateNumbers = (start: number, end: number, step: number = 1): number[] => {
+  if (start > end) {
+    throw new Error('Start number must be less than or equal to the end number.');
+  }
+
+  if (step <= 0) {
+    throw new Error('Step size must be a positive number.');
+  }
+
+  const length = Math.floor((end - start) / step) + 1;
+  return Array.from({ length }, (_, index) => start + index * step);
+};

@@ -2,8 +2,8 @@ import m from 'mithril';
 import { Button, Icon, ModalPanel, padLeft } from 'mithril-materialized';
 import background from '../assets/lcms_logo.png';
 import { MeiosisComponent, routingSvc } from '../services';
-import { Dashboards, DataModel, defaultModel } from '../models';
-import { Page, formatDate, onFinish, pdfToText } from '../utils';
+import { Page, Dashboards, DataModel, defaultModel } from '../models';
+import { formatDate, onFinish, pdfToText } from '../utils';
 // import { padLeft } from '';
 
 export const HomePage: MeiosisComponent = () => {
@@ -34,7 +34,6 @@ export const HomePage: MeiosisComponent = () => {
     },
     view: ({
       attrs: {
-        state: { model = defaultModel },
         actions: { saveModel, saveLog, changePage },
       },
     }) => {
@@ -42,11 +41,6 @@ export const HomePage: MeiosisComponent = () => {
 
       return [
         m('div', { style: 'position: relative;' }, [
-          // m(
-          // 	".overlay.center",
-          // 	{ style: "position: absolute; width: 100%" },
-          // 	[m("h3.bold", "Database for Human Enhancement Interventions")],
-          // ),
           m('img.responsive-img.center', { src: background }),
           m('.buttons.center', { style: 'margin: 10px auto;' }, [
             m(Button, {
@@ -56,40 +50,29 @@ export const HomePage: MeiosisComponent = () => {
               label: 'Clear',
               modalId: 'clearAll',
             }),
-            // typeof model.version === "number" && m(
-            // 	Button,
-            // 	{
-            // 		iconName: "edit",
-            // 		className: "btn-large",
-            // 		label: "Continue",
-            // 		onclick: () => {
-            // 			routingSvc.switchTo(Dashboards.OVERVIEW);
-            // 		},
-            // 	},
-            // ),
-            m('a#downloadAnchorElem', { style: 'display:none' }),
-            m(Button, {
-              iconName: 'download',
-              disabled: isCleared,
-              className: 'btn-large',
-              label: 'Download',
-              onclick: () => {
-                const dlAnchorElem = document.getElementById('downloadAnchorElem');
-                if (!dlAnchorElem) {
-                  return;
-                }
-                const version = typeof model.version === 'undefined' ? 1 : model.version++;
-                const dataStr =
-                  'data:text/json;charset=utf-8,' +
-                  encodeURIComponent(JSON.stringify({ ...model, version }, null, 2));
-                dlAnchorElem.setAttribute('href', dataStr);
-                dlAnchorElem.setAttribute(
-                  'download',
-                  `${formatDate()}_v${padLeft(version, 3)}_hpte_model.json`
-                );
-                dlAnchorElem.click();
-              },
-            }),
+            // m('a#downloadAnchorElem', { style: 'display:none' }),
+            // m(Button, {
+            //   iconName: 'download',
+            //   disabled: isCleared,
+            //   className: 'btn-large',
+            //   label: 'Download',
+            //   onclick: () => {
+            //     const dlAnchorElem = document.getElementById('downloadAnchorElem');
+            //     if (!dlAnchorElem) {
+            //       return;
+            //     }
+            //     const version = typeof model.version === 'undefined' ? 1 : model.version++;
+            //     const dataStr =
+            //       'data:text/json;charset=utf-8,' +
+            //       encodeURIComponent(JSON.stringify({ ...model, version }, null, 2));
+            //     dlAnchorElem.setAttribute('href', dataStr);
+            //     dlAnchorElem.setAttribute(
+            //       'download',
+            //       `${formatDate()}_v${padLeft(version, 3)}_hpte_model.json`
+            //     );
+            //     dlAnchorElem.click();
+            //   },
+            // }),
             m('input#selectFiles[type=file][accept=.pdf]', { style: 'display:none' }),
             // m('input#selectFiles[type=file][accept=.json,.pdf]', { style: 'display:none' }),
             readerAvailable &&
@@ -174,37 +157,38 @@ export const HomePage: MeiosisComponent = () => {
           m(
             '.section.white',
             m('.row.container.center', [
+              m(
+                '.row',
+                m(
+                  '.col.s12.align-center',
+                  'Deze EXPERIMENTELE viewer staat je toe om een LCMS log (PDF) in te laden, en het incident nog eens na te lopen.'
+                )
+              ),
               m('.row', [
                 m(
                   '.col.s12.m4',
                   m('.icon-block', [
-                    m('.center', m(Icon, { iconName: 'dashboard' })),
-                    m('h5.center', 'Prepare'),
-                    m(
-                      'p.light',
-                      'Create or select the interventions that are important for your mission.'
-                    ),
-                  ])
-                ),
-                m(
-                  '.col.s12.m4',
-                  m('.icon-block', [
                     m('.center', m(Icon, { iconName: 'visibility' })),
-                    m('h5.center', 'Assess'),
-                    m(
-                      'p.light',
-                      `Determine for each intervention how important it is, and your current performance, so you can prioritise and focus on the ones you really need.`
-                    ),
+                    m('h5.center', 'Beeldvorming'),
+                    m('p', 'Lees nog eens na hoe het allemaal verlopen is.'),
                   ])
                 ),
                 m(
                   '.col.s12.m4',
                   m('.icon-block', [
                     m('.center', m(Icon, { iconName: 'balance' })),
-                    m('h5.center', 'Compare'),
+                    m('h5.center', 'Beoordeel'),
+                    m('p', `Liep het incident lekker, of kan het nog beter.`),
+                  ])
+                ),
+                m(
+                  '.col.s12.m4',
+                  m('.icon-block', [
+                    m('.center', m(Icon, { iconName: 'edit_note' })),
+                    m('h5.center', 'Beslis'),
                     m(
-                      'p.light',
-                      'Compare and select interventions so you can choose the one that fits best with your needs.'
+                      'p',
+                      'Valt hier iets uit te leren? Zo ja, misschien goed om deze lessen op te nemen in de Lessons Learned Library...'
                     ),
                   ])
                 ),

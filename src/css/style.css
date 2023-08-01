@@ -770,3 +770,18 @@ table th {
   padding: 8px 15px;
   border-radius: 15px;
 }
+
+.timeline {
+  min-width: 100px;
+  width: calc(100% - 20px);
+  text-align: center;
+  position: fixed !important;
+  background-color: white;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+}
+
+.clickable {
+  cursor: pointer;
+}

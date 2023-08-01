@@ -1,27 +1,7 @@
 // This file is called myPDFfileToText.js and is in the root folder
 import { getDocument, PDFPageProxy } from 'pdfjs-dist';
 import { TextItem, TypedArray } from 'pdfjs-dist/types/src/display/api';
-
-export type PageInfo = {
-  offsetX: number;
-  offsetY: number;
-  fontHeight: number;
-  line: string;
-};
-
-export type EnrichedPageInfo = PageInfo & {
-  style: string;
-  indented: boolean;
-  join: boolean;
-  startParagraph: boolean;
-  /** Timestamp of the subsequent content blocks */
-  timestamp?: number;
-};
-
-export type Page = {
-  pageNumber: number;
-  pageInfo: PageInfo[];
-};
+import { EnrichedPageInfo, Page, PageInfo } from '../models';
 
 /**
  *
@@ -128,7 +108,7 @@ export const pdfToText = async (
 };
 
 const headerAndFooterFilter = (pageInfoBlock: PageInfo) =>
-  50 <= pageInfoBlock.offsetY && pageInfoBlock.offsetY < 790;
+  pageInfoBlock.fontHeight !== 12 && 50 <= pageInfoBlock.offsetY && pageInfoBlock.offsetY < 790;
 
 const fontToStyle = (fontHeights: number[]) => {
   const styles = fontHeights.map((_, i) => (i + 1 < fontHeights.length ? `h${i + 1}` : 'body'));
@@ -225,16 +205,8 @@ export const onFinish = (pages: Page[]) => {
       return acc;
     }, new Set<number>())
   ).sort((a, b) => (a > b ? -1 : 1));
+  // console.table({ fontHeights });
   const styler = fontToStyle(fontHeights);
-  // const indents = Array.from(
-  //   pages.reduce((acc, { pageInfo }) => {
-  //     pageInfo
-  //       .filter(headerAndFooterFilter)
-  //       .map(({ offsetX }) => offsetX)
-  //       .forEach((offsetX) => acc.add(offsetX));
-  //     return acc;
-  //   }, new Set())
-  // ).sort((a, b) => (a > b ? -1 : 1));
 
   const isIndented = offsetToIndent();
   const newParagraph = newParagraphFactory(fontHeights[fontHeights.length - 1]);
@@ -254,6 +226,7 @@ export const onFinish = (pages: Page[]) => {
           const join = joinLine(style, offsetX, line);
           const startParagraph = newParagraph(style, indented, offsetY);
           const timestamp = timestamper(line);
+          // console.log(`${style} ${fontHeight} ${line}`);
           return {
             style,
             indented,
@@ -267,7 +240,7 @@ export const onFinish = (pages: Page[]) => {
           } as EnrichedPageInfo;
         })
         .reduce((acc, cur) => {
-          if (cur.join) {
+          if (cur.join && acc.length) {
             acc[acc.length - 1].line += ' ' + cur.line;
           } else {
             acc.push(cur);

@@ -10,4 +10,6 @@ import { routingSvc } from './services/routing-service';
 //   onUpdate: (registration) => console.log('SW updated: ', registration),
 // });
 
+document.documentElement.setAttribute('lang', 'nl');
+
 m.route(document.body, routingSvc.defaultRoute, routingSvc.routingTable());
