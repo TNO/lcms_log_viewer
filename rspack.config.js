@@ -63,7 +63,7 @@ module.exports = {
     ],
   },
   output: {
-    publicPath: devMode ? undefined : 'https://tno.github.io/lcms_log_viewer',
+    publicPath: devMode ? undefined : 'https://tno.github.io/lcms_log_viewer/',
     filename: '[name].js',
     path: outputPath,
   },
